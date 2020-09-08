@@ -1,1 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yaroshidi's R P S</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+    <div>
+        <h1 class="text-dark" style="font-size:30px"  >Let's Play Rock, Paper, Scissors</h1>
+    </div>
 
+    <h6 style="font-size:18px" style="margin: mt-1" class="text-muted">Choose which one you would like to play:</h6>
+    <div id="buttons">
+      <button id="rock" type="button" class="btn btn-info">🗿&nbsp; Rock </button>
+      <button id="paper" type="button" class="btn btn-info">🧻&nbsp; Paper </button>
+      <button id="scissors" type="button" class="btn btn-info">✂️&nbsp; Scissors </button>
+    </div>
+    <div class="pt-2" id="gameOutput">
+      <p id="computerChoice"></p>
+      <p id="theRule"></p>
+      <p id="roundResults"></p>
+      <p class="text-primary" id="userScore"></p>
+      <p class="text-primary" id="computerScore"></p>
+    </div>
+    <div id="resetGame">
+      <button id="reset" type="button" class="btn btn-info">🔁&nbsp; Reset Game</button>
+    </div>
+  </div>
+
+<script>
+
+    // We start from 0
+    let computerScore = 0;
+    let userScore = 0;
+
+    // Let's grab the HTML
+    let compChoiceOutput = document.querySelector('#computerChoice');
+    let ruleOutput = document.querySelector('#theRule');
+    let resultOutput = document.querySelector('#roundResults');
+    let userScoreOutput = document.querySelector('#userScore');
+    let computerScoreOutput = document.querySelector('#computerScore');
+
+
+    let rock = document.querySelector('#rock');
+    rock.addEventListener('click', () => {
+         playRound(0);
+     });
+
+
+    let paper = document.querySelector('#paper');
+        paper.addEventListener('click', function() {
+          playRound(1);
+         });
+
+
+
+    let scissors = document.querySelector('#scissors');
+    scissors.addEventListener('click', function() {
+      playRound(2);
+    });
+
+
+
+    let reset = document.querySelector('#reset');
+    reset.addEventListener('click', function() {
+      resetGame();
+    })
+
+
+    function getRandomInt(max) {
+      const randomNumber = Math.floor(Math.random() * Math.floor(max));
+      return randomNumber;
+    }
+
+    function computerPlay() {
+      const random = getRandomInt(3);
+
+      return random;
+    }
+
+    function playRound(userChoice) {
+      const computerSelection = computerPlay();
+
+      if (userChoice == computerSelection) {
+        compChoiceOutput.textContent = "I choose the same!";
+        ruleOutput.textContent = "That's a tie";
+        resultOutput.textContent = "No score is recorded";
+        userScoreOutput.textContent = "Your Score: " + userScore;
+        computerScoreOutput.textContent = "Computer Score: " + computerScore;
+
+      } else if (userChoice == 0 && computerSelection == 2) {
+          userScore++;
+          compChoiceOutput.textContent = "I choose Scissors";
+          ruleOutput.textContent = "but rock beats scissors";
+          resultOutput.textContent = "You win this one!";
+          userScoreOutput.textContent = "Your Score: " + userScore;
+          computerScoreOutput.textContent = "Computer Score: " + computerScore;
+      } else if (userChoice == 1 && computerSelection == 0) {
+          userScore++;
+          compChoiceOutput.textContent = "I choose rock";
+          ruleOutput.textContent = "but paper beats rock";
+          resultOutput.textContent = "Good one!";
+          userScoreOutput.textContent = "Your Score: " + userScore;
+          computerScoreOutput.textContent = "Computer Score: " + computerScore;
+      } else if (userChoice == 2 && computerSelection == 1) {
+          userScore++;
+          compChoiceOutput.textContent = "I choose paper";
+          ruleOutput.textContent = "but scissors beats paper";
+          resultOutput.textContent = "One point for you!";
+          userScoreOutput.textContent = "Your Score: " + userScore;
+          computerScoreOutput.textContent = "Computer Score: " + computerScore;
+      } else if (computerSelection == 0 && userChoice == 2) {
+          computerScore++;
+          compChoiceOutput.textContent = "I choose rock";
+          ruleOutput.textContent = "And rock beats scissors";
+          resultOutput.textContent = "I win this one!";
+          userScoreOutput.textContent = "Your Score: " + userScore;
+          computerScoreOutput.textContent = "Computer Score: " + computerScore;
+      } else if (computerSelection == 1 && userChoice == 0) {
+          computerScore++;
+          compChoiceOutput.textContent = "I choose paper";
+          ruleOutput.textContent = "We know that paper beats rock";
+          resultOutput.textContent = "Point for me";
+          userScoreOutput.textContent = "Your Score: " + userScore;
+          computerScoreOutput.textContent = "Computer Score: " + computerScore;
+      } else if (computerSelection == 2 && userChoice == 1) {
+          computerScore++;
+          compChoiceOutput.textContent = "I choose scissors";
+          ruleOutput.textContent = "Scissors are made to cut papers";
+          resultOutput.textContent = "I win!";
+          userScoreOutput.textContent = "Your Score: " + userScore;
+          computerScoreOutput.textContent = "Computer Score: " + computerScore;
+      } else {
+          console.log("Something went wrong");
+      }
+
+      if (userScore == 5 || computerScore == 5) {
+        endGame();
+        autoReset();
+        disableButtons();
+      }
+
+      return userScore, computerScore;
+    } 
+
+    function autoReset() { 
+        setTimeout(function () {resetGame(), enableButtons()}, 3000);
+    }
+
+    function disableButtons() {
+        rock.disabled = true;
+        paper.disabled = true;
+        scissors.disabled = true;
+    }
+    function enableButtons() {
+        rock.disabled = false;
+        paper.disabled = false;
+        scissors.disabled = false;
+    }
+
+    function endGame() {
+      if (userScore > computerScore) {
+            compChoiceOutput.textContent = "YOU WON!";
+            ruleOutput.textContent = "You were the first to reach 5 points";
+            resultOutput.textContent = "You defeated the computer 🤖 ";
+      } else if (userScore < computerScore) {
+            compChoiceOutput.textContent = "You lost";
+            ruleOutput.textContent = "I got to 5 points before you";
+            resultOutput.textContent = "Better luck next time";
+      } else {
+            compChoiceOutput.textContent = "IT'S A TIE";
+            ruleOutput.textContent = "We both got to 5 together";
+            resultOutput.textContent = "We must play a tie breaker";
+      }
+
+    }
+
+      function resetGame() {
+      userScore = 0;
+      computerScore = 0;
+      compChoiceOutput.textContent = " ";
+      ruleOutput.textContent = " ";
+      resultOutput.textContent = " ";
+      userScoreOutput.textContent = "Your Score: " + userScore;
+      computerScoreOutput.textContent = "Computer Score: " + computerScore;
+    }
+
+  </script>
+
+
+</body>
+</html>
